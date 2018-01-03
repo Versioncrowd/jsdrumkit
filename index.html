@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Vanilla JS Drumkit</title>
+  <link rel="stylesheet" type="text/css" href="style.css">
+</head>
+<body>
+    <div data-key="65" class="keys">A</div>
+    <div data-key="83" class="keys">S</div>
+    <div data-key="68" class="keys">D</div>
+    <div data-key="70" class="keys">F</div>
+    <div data-key="71" class="keys">G</div>
+    <div data-key="72" class="keys">H</div>
+    <div data-key="74" class="keys">J</div>
+
+    <audio data-key="65" src="audio1.wav"></audio>
+    <audio data-key="83" src="audio2.wav"></audio>
+    <audio data-key="68" src="audio3.wav"></audio>
+    <audio data-key="70" src="audio4.wav"></audio>
+    <audio data-key="71" src="audio5.wav"></audio>
+    <audio data-key="72" src="audio6.wav"></audio>
+    <audio data-key="74" src="audio7.wav"></audio>
+
+<script type="text/javascript">
+  function playSound(e){
+    const audio = document.querySelector(`audio[data-key="${e.keyCode}"]`);
+    const key = document.querySelector(`.keys[data-key="${e.keyCode}"]`);
+    /* when an element is playing already, then remove the class
+    const playing = document.querySelector(`.playing`);
+    if(playing) playing.classList.remove('playing'); */
+    if (!audio) return; // if no audio element found go out of the function
+    audio.currentTime = 0; //rewind to the start
+    audio.play();
+    key.classList.add('playing');
+  }
+
+  function removeTransition(e) {
+    if (e.propertyName !== 'transform') return; // skip if its not a transition
+    this.classList.remove('playing');
+  };
+
+  const keys = document.querySelectorAll('.keys');
+  keys.forEach(key => key.addEventListener('transitionend', removeTransition))
+
+  window.addEventListener('keydown', playSound); 
+</script>    
+</body>
+</html>
